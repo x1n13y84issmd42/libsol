@@ -1,0 +1,2 @@
+# libsol
+A Solidity library.
