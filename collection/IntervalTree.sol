@@ -19,32 +19,6 @@ library IntervalTree {
         uint right;
     }
     
-    // A "hybrid array" collection type.
-    // Never shrinks, always grows, can be emptied at no cost and refilled at will.
-    struct NodeArray {
-        Node[] data;
-        uint length;
-    }
-    
-    // Adds a node to the array.
-    function push(NodeArray storage array, Node storage node) public {
-        if (array.length >= array.data.length) {
-            array.data.push(node);
-        } else {
-            array.data[array.length] = node;
-        }
-        array.length++;
-    }
-    
-    // Resets the array to "empty" state.
-    function empty(NodeArray storage array) public {
-        array.length = 0;
-    }
-    
-    function at(NodeArray storage array, uint i) public view returns(Node storage) {
-        return array.data[i];
-    }
-    
     // The tree itself.
     // Uses an array for storage.
     struct Tree {
@@ -98,14 +72,14 @@ library IntervalTree {
 
     // Traverses the tree and finds all intervals that contain v.
     // Puts found intervals into the nodes array.
-    function search(Tree storage tree, uint v, NodeArray storage nodes) public {
+    function search(Tree storage tree, uint v, Node[] storage nodes) public {
         searchIntervals(tree, 0, v, nodes);
     }
     
     // DFS.
-    function searchIntervals(Tree storage tree, uint i, uint v, NodeArray storage nodes) private {
+    function searchIntervals(Tree storage tree, uint i, uint v, Node[] storage nodes) private {
         if (contains(tree.nodes[i].i, v)) {
-            push(nodes, tree.nodes[i]);
+            nodes.push(tree.nodes[i]);
         }
 
         if (tree.nodes[i].left != 0 && tree.nodes[tree.nodes[i].left].max >= v) {
