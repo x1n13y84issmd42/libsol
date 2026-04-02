@@ -9,7 +9,7 @@ contract Owned {
 
 	event OwnershipTransfer(address newOwner);
 
-	modifier OnlyOwner {
+	modifier only_owner {
 		if (msg.sender != owner) {
 			revert OnlyOwnerAllowed(msg.sender);
 		}
@@ -21,7 +21,7 @@ contract Owned {
 		owner = msg.sender;
 	}
 
-	function transferOwnership(address newOwner) external OnlyOwner {
+	function transferOwnership(address newOwner) external only_owner {
 		if (newOwner == address(0)) {
 			revert InvalidOwner(address(0));
 		}

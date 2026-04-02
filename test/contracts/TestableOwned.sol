@@ -4,7 +4,7 @@ pragma solidity 0.8.28;
 import { Owned } from "../../contracts/access/Owned.sol";
 
 contract TestableOwned is Owned {
-	function test() external view OnlyOwner {
+	function test() external view only_owner {
 		///
 	}
 }

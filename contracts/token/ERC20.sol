@@ -26,7 +26,7 @@ contract ERC20Token is Owned {
 		decimals = _decimals;
 	}
 
-	function mint(address to, uint256 amount) external OnlyOwner {
+	function mint(address to, uint256 amount) external only_owner {
 		if (to == address(0)) {
 			revert InvalidReceiver(address(0));
 		}
