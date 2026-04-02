@@ -1,23 +1,7 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.8.28;
 
-contract Owned {
-	address payable public owner;
-
-	error OnlyOwnerAllowed();
-
-	modifier OnlyOwner {
-		if (msg.sender != owner) {
-			revert OnlyOwnerAllowed();
-		}
-
-		_;
-	}
-
-	constructor() {
-		owner = payable(msg.sender);
-	}
-}
+import { Owned } from "../access/Owned.sol";
 
 contract ERC20Token is Owned {
 	mapping (address => uint256) public balanceOf;

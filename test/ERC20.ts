@@ -1,8 +1,9 @@
 import { network } from 'hardhat';
 import { describe, it, afterEach } from 'node:test';
-import assert from 'node:assert';
+import assert from '../../utility/assert.js';
 import * as testutils from '../../utility/testutils.js'
 import { getAddress } from 'viem';
+import { soltest } from '../../utility/soltest.js';
 
 describe("ERC20Token", async function () {
 	const { viem, networkHelpers } = await network.connect();
@@ -51,27 +52,19 @@ describe("ERC20Token", async function () {
 	});
 
 	it("mint() - revert OnlyOwnerAllowed", async function () {
-		try {
-			await cERC20Token.write.mint([coinOwner1.account.address, 121n], {account: coinOwner1.account});
-			assert.fail("Contract chould have reverted.");
-		} catch(e: any) {
-			assert.equal(
-				e.details,
-				testutils.contractErrorMessage('OnlyOwnerAllowed')
-			);
-		}
+		await assert.reverts(
+			cERC20Token.write.mint([coinOwner1.account.address, 121n], {account: coinOwner1.account}),
+			'OnlyOwnerAllowed',
+			coinOwner1.account.address
+		);
 	});
 
 	it("mint() to address(0) - revert InvalidReceiver", async function () {
-		try {
-			await cERC20Token.write.mint([addr0, 1n], {account: contractOwner.account});
-			assert.fail("Contract chould have reverted.");
-		} catch(e: any) {
-			assert.equal(
-				e.details,
-				testutils.contractErrorMessage('InvalidReceiver', addr0)
-			);
-		}
+		await assert.reverts(
+			cERC20Token.write.mint([soltest.Address0, 1n], {account: contractOwner.account}),
+			'InvalidReceiver',
+			soltest.Address0
+		);
 	});
 
 	it("approve()", async function () {
@@ -101,15 +94,11 @@ describe("ERC20Token", async function () {
 	});
 
 	it("approve() for address(0) - revert InvalidReceiver", async function () {
-		try {
-			await cERC20Token.write.approve([addr0, 1n], {account: contractOwner.account});
-			assert.fail("Contract chould have reverted.");
-		} catch(e: any) {
-			assert.equal(
-				e.details,
-				testutils.contractErrorMessage('InvalidReceiver', addr0)
-			);
-		}
+		await assert.reverts(
+			cERC20Token.write.approve([soltest.Address0, 1n], {account: contractOwner.account}),
+			'InvalidReceiver',
+			soltest.Address0,
+		);
 	});
 
 	it("transfer()", async function () {
@@ -148,20 +137,13 @@ describe("ERC20Token", async function () {
 		const balanceOwner1 = await cERC20Token.read.balanceOf([coinOwner1.account.address]);
 		const balanceReceiver1 = await cERC20Token.read.balanceOf([coinReceiver.account.address]);
 
-		try {
-			await cERC20Token.write.transfer([coinReceiver.account.address, amount], {account: coinOwner1.account});
-			assert.fail("Contract chould have reverted.");
-		} catch(e: any) {
-			assert.equal(
-				e.details,
-				testutils.contractErrorMessage(
-					'InsufficientFunds',
-					coinOwner1.account.address,
-					balanceOwner1,
-					amount,
-				)
-			);
-		}
+		await assert.reverts(
+			cERC20Token.write.transfer([coinReceiver.account.address, amount], {account: coinOwner1.account}),
+			'InsufficientFunds',
+			coinOwner1.account.address,
+			balanceOwner1,
+			amount,
+		);
 
 		const balanceOwner2 = await cERC20Token.read.balanceOf([coinOwner1.account.address]);
 		const balanceReceiver2 = await cERC20Token.read.balanceOf([coinReceiver.account.address]);
@@ -181,12 +163,11 @@ describe("ERC20Token", async function () {
 	});
 
 	it("transfer() to address(0) - revert InvalidReceiver", async function () {
-		try {
-			await cERC20Token.write.transfer([addr0, 1n], {account: coinOwner1.account});
-			assert.fail("Contract chould have reverted.");
-		} catch (e: any) {
-			assert.equal(e.details, testutils.contractErrorMessage('InvalidReceiver', addr0));
-		}
+		await assert.reverts(
+			cERC20Token.write.transfer([soltest.Address0, 1n], {account: coinOwner1.account}),
+			'InvalidReceiver',
+			soltest.Address0,
+		);
 	});
 
 	it("transferFrom() coin owner", async function () {
@@ -258,37 +239,27 @@ describe("ERC20Token", async function () {
 
 		const spenderAllowance = await cERC20Token.read.allowance([coinOwner1.account.address, coinSpender.account.address]);
 
-		try {
-			await cERC20Token.write.transferFrom(
-				[coinOwner1.account.address, coinReceiver.account.address, amount],
-				{account: coinSpender.account},
-			);
-			assert.fail(`Contract should have failed.`);
-		} catch (e: any) {
-			assert.equal(
-				e.details,
-				testutils.contractErrorMessage(
-					'InsufficientAllowance',
-					coinOwner1.account.address,
-					coinSpender.account.address,
-					spenderAllowance,
-					amount
-				)
-			);
-		}
+		const promise = cERC20Token.write.transferFrom(
+			[coinOwner1.account.address, coinReceiver.account.address, amount],
+			{account: coinSpender.account},
+		);
+
+		await assert.reverts(promise, 'InsufficientAllowance',
+			coinOwner1.account.address,
+			coinSpender.account.address,
+			spenderAllowance,
+			amount,
+		);
 	});
 
 	it("transferFrom() from address(0) - revert InvalidSender", async function () {
 		const amount = 2n;
 
-		try {
-			await cERC20Token.write.transferFrom(
-				[addr0, coinReceiver.account.address, amount],
-				{account: coinSpender.account},
-			);
-			assert.fail(`Contract should have failed.`);
-		} catch (e: any) {
-			assert.equal(e.details, testutils.contractErrorMessage('InvalidSender', addr0));
-		}
+		const promise = cERC20Token.write.transferFrom(
+			[soltest.Address0, coinReceiver.account.address, amount],
+			{account: coinSpender.account},
+		);
+
+		await assert.reverts(promise, 'InvalidSender', soltest.Address0);
 	});
 });
