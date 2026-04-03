@@ -1,3 +1,5 @@
+[![Code Coverage](https://codecov.io/github/x1n13y84issmd42/devlibsol/graph/badge.svg?token=TOL26X14MV)](https://codecov.io/github/x1n13y84issmd42/devlibsol)
+
 # libsol
 A Solidity library no one asked for.
 
