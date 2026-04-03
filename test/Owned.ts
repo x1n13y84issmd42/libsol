@@ -14,10 +14,10 @@ describe("Owned", async function () {
 	const cOwned = await viem.deployContract("TestableOwned", [], {client: {wallet: owner1}});
 
 	it ("OnlyOwner - revert OnlyOwnerAllowed", async function () {
-		await cOwned.read.test({account: owner1.account});
+		await cOwned.read.action({account: owner1.account});
 
 		await assert.reverts(
-			cOwned.read.test({account: owner2.account}),
+			cOwned.read.action({account: owner2.account}),
 			'OnlyOwnerAllowed',
 			owner2.account.address,
 		);
@@ -44,12 +44,12 @@ describe("Owned", async function () {
 
 		// After transfer the former owner cannot access the contract.
 		await assert.reverts(
-			cOwned.read.test({account: owner1.account}),
+			cOwned.read.action({account: owner1.account}),
 			'OnlyOwnerAllowed',
 			owner1.account.address,
 		);
 
 		// But the new one can.
-		await cOwned.read.test({account: owner2.account});
+		await cOwned.read.action({account: owner2.account});
 	});
 });
