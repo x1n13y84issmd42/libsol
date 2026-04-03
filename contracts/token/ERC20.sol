@@ -3,6 +3,10 @@ pragma solidity 0.8.28;
 
 import { Owned } from "../access/Owned.sol";
 
+/**
+ * @notice ERC20 Token standard implementation.
+ * See https://eips.ethereum.org/EIPS/eip-20
+ */
 contract ERC20Token is Owned {
 	mapping (address => uint256) public balanceOf;
 	mapping (address => mapping (address => uint256)) public allowance;
