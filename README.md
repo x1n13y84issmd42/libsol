@@ -1,3 +1,4 @@
+[![Unit Tests](https://github.com/x1n13y84issmd42/devlibsol/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/x1n13y84issmd42/devlibsol/actions/workflows/node.js.yml)
 [![Code Coverage](https://codecov.io/github/x1n13y84issmd42/devlibsol/graph/badge.svg?token=TOL26X14MV)](https://codecov.io/github/x1n13y84issmd42/devlibsol)
 
 # libsol
