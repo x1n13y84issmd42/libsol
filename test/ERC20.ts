@@ -1,7 +1,6 @@
 import { network } from 'hardhat';
 import { describe, it, afterEach } from 'node:test';
 import assert from '../../utility/assert.js';
-import * as testutils from '../../utility/testutils.js'
 import { getAddress } from 'viem';
 import { soltest } from '../../utility/soltest.js';
 
@@ -17,8 +16,6 @@ describe("ERC20Token", async function () {
 	const coinReceiver = clients[4];
 
 	const cERC20Token = await viem.deployContract("ERC20Token", ["TestCoin", "XTC", 8], {client: {wallet: contractOwner}});
-
-	const addr0 = "0x0000000000000000000000000000000000000000";
 
 	afterEach(async function () {
 		// So every case starts with a new block.
