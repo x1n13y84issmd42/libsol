@@ -20,5 +20,10 @@ A Solidity library no one asked for.
 |---|---|
 |[ERC20](contracts/token/ERC20.sol)|Implementation of [ERC20 token standard](https://eips.ethereum.org/EIPS/eip-20).|
 
+## Utility
+|Contract|Description|
+|---|---|
+|[Pausable](contracts/utility/Pausable.sol)|Pausable contract.|
+
 ## Development
 [devlibsol](https://github.com/x1n13y84issmd42/devlibsol) is needed to for testing and deployment.
