@@ -7,7 +7,7 @@ pragma solidity 0.8.28;
  * 
  * @dev Inherit this to have the {only_owner} function modifier available.
  */
-contract Owned {
+contract Ownable {
 	address public owner;
 
 	error OnlyOwnerAllowed(address addr);
