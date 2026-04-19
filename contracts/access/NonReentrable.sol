@@ -5,7 +5,7 @@ pragma solidity 0.8.28;
  * @notice Prevents reentrant calls to contract functions.
  * @dev Inherit this contract to have the {non_reentrant} function modifier available.
  */
-contract NonReentrant {
+contract NonReentrable {
 	uint8 entered;
 
 	/**

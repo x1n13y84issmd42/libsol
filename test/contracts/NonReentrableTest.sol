@@ -1,24 +1,24 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.8.28;
 
-import { NonReentrant } from "../../contracts/access/NonReentrant.sol";
+import { NonReentrable } from "../../contracts/access/NonReentrable.sol";
 import { Test } from 'forge-std/Test.sol';
 
 /**
  * @title Test subject.
  */
-contract TestableNonReentrant is NonReentrant {
+contract TestableNonReentrable is NonReentrable {
 	function action() external non_reentrant {
 		(bool ok,) = msg.sender.call{value: 0}("");
 		require(ok);
 	}
 }
 
-contract NonReentrantTest is Test {
-	TestableNonReentrant testable;
+contract NonReentrableTest is Test {
+	TestableNonReentrable testable;
 
 	function setUp() public {
-		testable = new TestableNonReentrant();
+		testable = new TestableNonReentrable();
 	}
 
 	error Foobar();
@@ -28,8 +28,8 @@ contract NonReentrantTest is Test {
 	}
 
 	receive() external payable {
-		vm.expectRevert(NonReentrant.ReentrancyDenied.selector);
+		vm.expectRevert(NonReentrable.ReentrancyDenied.selector);
 
-		TestableNonReentrant(msg.sender).action();
+		TestableNonReentrable(msg.sender).action();
 	}
 }
